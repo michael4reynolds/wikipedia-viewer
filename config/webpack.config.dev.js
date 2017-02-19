@@ -1,4 +1,3 @@
-var autoprefixer = require('autoprefixer');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -7,7 +6,11 @@ var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeMod
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
-
+var path = require('path')
+var cssnext = require('postcss-cssnext')
+var ant = require('postcss-ant')
+var fontMagician = require('postcss-font-magician');
+var nested = require('postcss-nested')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -103,7 +106,7 @@ module.exports = {
         exclude: [
           /\.html$/,
           /\.(js|jsx)$/,
-          /\.css$/,
+          /\.p?css$/,
           /\.json$/,
           /\.svg$/
         ],
@@ -132,7 +135,7 @@ module.exports = {
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
       {
-        test: /\.css$/,
+        test: /\.p?css$/,
         loader: 'style!css?importLoaders=1!postcss'
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
@@ -154,17 +157,21 @@ module.exports = {
     ]
   },
   
-  // We use PostCSS for autoprefixing only.
   postcss: function() {
     return [
-      autoprefixer({
-        browsers: [
-          '>1%',
-          'last 4 versions',
-          'Firefox ESR',
-          'not ie < 9', // React doesn't support IE8 anyway
-        ]
-      }),
+      cssnext(),
+      nested,
+      ant(),
+      fontMagician({
+        variants: {
+          'Open Sans': {
+            '300': [],
+            '400': [],
+            '700': []
+          }
+        },
+        foundries: ['google']
+      })
     ];
   },
   plugins: [

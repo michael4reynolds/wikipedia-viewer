@@ -8,7 +8,11 @@ var url = require('url');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
-
+var path = require('path')
+var cssnext = require('postcss-cssnext')
+var ant = require('postcss-ant')
+var fontMagician = require('postcss-font-magician');
+var nested = require('postcss-nested')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -108,7 +112,7 @@ module.exports = {
         exclude: [
           /\.html$/,
           /\.(js|jsx)$/,
-          /\.css$/,
+          /\.p?css$/,
           /\.json$/,
           /\.svg$/
         ],
@@ -138,7 +142,7 @@ module.exports = {
       // use the "style" loader inside the async code so CSS from them won't be
       // in the main CSS file.
       {
-        test: /\.css$/,
+        test: /\.p?css$/,
         loader: ExtractTextPlugin.extract(
           'style',
           'css?importLoaders=1!postcss',
@@ -165,17 +169,21 @@ module.exports = {
     ]
   },
   
-  // We use PostCSS for autoprefixing only.
   postcss: function() {
     return [
-      autoprefixer({
-        browsers: [
-          '>1%',
-          'last 4 versions',
-          'Firefox ESR',
-          'not ie < 9', // React doesn't support IE8 anyway
-        ]
-      }),
+      cssnext(),
+      nested,
+      ant(),
+      fontMagician({
+        variants: {
+          'Open Sans': {
+            '300': [],
+            '400': [],
+            '700': []
+          }
+        },
+        foundries: ['google']
+      })
     ];
   },
   plugins: [
