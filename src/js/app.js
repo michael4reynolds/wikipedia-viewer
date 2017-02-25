@@ -3,43 +3,78 @@ import axios from 'axios'
 import classNames from 'classnames'
 import {loadState, saveState} from './localStorage'
 
+// View
+const searchForm = document.getElementById('search-form')
+const searchText = document.getElementById('search')
+const randomBtn = document.getElementById('random')
+const results = document.getElementById('results')
+
+const cardView = (page, header) => {
+  let title = `${page.title}`
+  let link = `${wikiLink}/${title.replace(/\s/g, '_')}`
+  let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
+  let image = thumb != null ? `<img src=${thumb}>` : null
+  return `<li>${header}${'\n'}${image}${'\n'}<a href="${link}" target="_blank">${title}</a></li>`
+}
+
+//Model
+const wikiApi = 'https://en.wikipedia.org/w/api.php'
 const wikiLink = 'https://en.wikipedia.org/wiki'
 let persistedState = loadState() || {}
 let lastSearch = persistedState.lastSearch || ''
 
-const searchForm = document.getElementById('search-form')
-const searchText = document.getElementById('search')
-const randomBtn = document.getElementById('random')
+const queryParams = (text) => ({
+  action: "query",
+  prop: "pageimages|extracts",
+  generator: "search",
+  gsrsearch: text,
+  gsrlimit: "10",
+  pilimit: "max",
+  pithumbsize: 300,
+  exsentences: "1",
+  format: "json",
+  origin: "*"
+})
 
-const performSearch = (e) => {
+const parseParams = (title) => ({
+  action: "parse",
+  page: title,
+  section: 0,
+  format: "json",
+  origin: "*"
+})
+
+//Controller
+async function getQueryPages() {
+  const {data} = await axios.get(wikiApi, {params: queryParams(searchText.value)})
+  return data.query.pages
+}
+
+async function performParse(pageTitle) {
+  const {data} = await axios.get(wikiApi, {params: parseParams(pageTitle)})
+  return data.parse.text["*"]
+}
+
+const displayLines = (view) => {
+  results.innerHTML = view.join('')
+}
+
+const rememberSearch = () => {
+  persistedState.lastSearch = searchText.value
+  saveState(persistedState)
+}
+
+async function performSearch(e) {
   e.preventDefault()
-  axios.get('https://en.wikipedia.org/w/api.php', {
-    params: {
-      action: "query",
-      prop: "pageimages|extracts",
-      generator: "search",
-      gsrsearch: searchText.value,
-      gsrlimit: "10",
-      pilimit: "max",
-      exsentences: "1",
-      format: "json",
-      origin: "*"
-    }
+  let pagesData = await getQueryPages()
+  let view = Object.keys(pagesData).map(async(key) => {
+    const page = pagesData[key]
+    let header = await performParse(page.title)
+    return cardView(page, header)
   })
-    .then((result) => {
-      let pages = result.data.query.pages
-      let keyView = Object.keys(pages).map((key) => {
-        let title = `${pages[key].title}`
-        let link = `${wikiLink}/${title.replace(/\s/g, '_')}`
-        return `<li><a href="${link}" target="_blank">${title}</a></li>`
-      })
-      document.getElementById('result').innerHTML = keyView.join('')
-      persistedState.lastSearch = searchText.value
-      saveState(persistedState)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  let lines = await Promise.all(view)
+  displayLines(lines)
+  rememberSearch()
 }
 
 const viewRandomPage = () => {
@@ -47,7 +82,5 @@ const viewRandomPage = () => {
 }
 
 searchText.value = lastSearch
-searchForm.onsubmit =  performSearch
+searchForm.onsubmit = performSearch
 randomBtn.onclick = viewRandomPage
-
-
