@@ -39,28 +39,29 @@ const results = document.getElementById('results')
 
 const cardView = (page, header, html) => {
   let title = `${page.title}`
-  let link = `${wikiLink}/${title.replace(/\s/g, '_')}`
+  const href = `${wikiLink}/${title.replace(/\s/g, '_')}`
+  let link = `<a href="${href}" target="_blank">${title}</a>`
   let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
   let image = thumb != null ? `<img src=${thumb}>` : `<img src=${noImage}>`
   const re = /\b((?!=|,|\.|\n).)+(.)\b/g
   const match = html.innerText.match(re)
-  let intro = `${match[0]}>${match[1]}`
-  if (intro.length > 99) {intro = `${intro.substring(0, 99)}...`}
+  let intro = `<p>${match[0]} - ${match[1]}</p>`
+  if (intro.length > 99) {intro = `${intro.substring(0, 99)}...</p>`}
   return (
     `<li>
        ${intro}
        ${image}
-       <a href="${link}" target="_blank">${title}</a>
+       ${link}
      </li>`)
 }
 
 //Controller
-async function getQueryPages() {
+const getQueryPages = async () => {
   const {data} = await axios.get(wikiApi, {params: queryParams(searchText.value)})
   return data.query.pages
 }
 
-async function performParse(pageTitle) {
+const performParse = async (pageTitle) => {
   const {data} = await axios.get(wikiApi, {params: parseParams(pageTitle)})
   return data.parse.text["*"]
 }
@@ -74,7 +75,7 @@ const rememberSearch = () => {
   saveState(persistedState)
 }
 
-async function performSearch(e) {
+const performSearch = async (e) => {
   e.preventDefault()
   let pagesData = await getQueryPages()
   let view = Object.keys(pagesData).map(async (key) => {
