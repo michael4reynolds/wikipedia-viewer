@@ -3,23 +3,10 @@ import axios from 'axios'
 import classNames from 'classnames'
 import {loadState, saveState} from './localStorage'
 
-// View
-const searchForm = document.getElementById('search-form')
-const searchText = document.getElementById('search')
-const randomBtn = document.getElementById('random')
-const results = document.getElementById('results')
-
-const cardView = (page, header) => {
-  let title = `${page.title}`
-  let link = `${wikiLink}/${title.replace(/\s/g, '_')}`
-  let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
-  let image = thumb != null ? `<img src=${thumb}>` : null
-  return `<li>${header}${'\n'}${image}${'\n'}<a href="${link}" target="_blank">${title}</a></li>`
-}
-
 //Model
 const wikiApi = 'https://en.wikipedia.org/w/api.php'
 const wikiLink = 'https://en.wikipedia.org/wiki'
+const noImage = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Wikipedia-info.png'
 let persistedState = loadState() || {}
 let lastSearch = persistedState.lastSearch || ''
 
@@ -44,6 +31,29 @@ const parseParams = (title) => ({
   origin: "*"
 })
 
+// View
+const searchForm = document.getElementById('search-form')
+const searchText = document.getElementById('search')
+const randomBtn = document.getElementById('random')
+const results = document.getElementById('results')
+
+const cardView = (page, header, html) => {
+  let title = `${page.title}`
+  let link = `${wikiLink}/${title.replace(/\s/g, '_')}`
+  let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
+  let image = thumb != null ? `<img src=${thumb}>` : `<img src=${noImage}>`
+  const re = /\b((?!=|,|\.|\n).)+(.)\b/g
+  const match = html.innerText.match(re)
+  let intro = `${match[0]}>${match[1]}`
+  if (intro.length > 99) {intro = `${intro.substring(0, 99)}...`}
+  return (
+    `<li>
+       ${intro}
+       ${image}
+       <a href="${link}" target="_blank">${title}</a>
+     </li>`)
+}
+
 //Controller
 async function getQueryPages() {
   const {data} = await axios.get(wikiApi, {params: queryParams(searchText.value)})
@@ -67,10 +77,12 @@ const rememberSearch = () => {
 async function performSearch(e) {
   e.preventDefault()
   let pagesData = await getQueryPages()
-  let view = Object.keys(pagesData).map(async(key) => {
+  let view = Object.keys(pagesData).map(async (key) => {
     const page = pagesData[key]
     let header = await performParse(page.title)
-    return cardView(page, header)
+    let html = document.createElement('div')
+    html.innerHTML = header
+    return cardView(page, header, html)
   })
   let lines = await Promise.all(view)
   displayLines(lines)
@@ -81,6 +93,11 @@ const viewRandomPage = () => {
   window.open('https://en.wikipedia.org/wiki/Special:Random', '_blank')
 }
 
-searchText.value = lastSearch
-searchForm.onsubmit = performSearch
-randomBtn.onclick = viewRandomPage
+// initialize
+const init = () => {
+  searchText.value = lastSearch
+  searchForm.onsubmit = performSearch
+  randomBtn.onclick = viewRandomPage
+}
+
+init()
