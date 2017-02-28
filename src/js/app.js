@@ -37,21 +37,30 @@ const searchText = document.getElementById('search')
 const randomBtn = document.getElementById('random')
 const results = document.getElementById('results')
 
-const cardView = (page, header, html) => {
+const cardView = (page, html) => {
   let title = `${page.title}`
   const href = `${wikiLink}/${title.replace(/\s/g, '_')}`
-  let link = `<a href="${href}" target="_blank">${title}</a>`
   let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
   let image = thumb != null ? `<img src=${thumb}>` : `<img src=${noImage}>`
-  const re = /\b((?!=|,|\.|\n).)+(.)\b/g
+  const re = /((?!\.\s|\n).)+(.)/g
   const match = html.innerText.match(re)
-  let intro = `<p>${match[0]} - ${match[1]}</p>`
-  if (intro.length > 99) {intro = `${intro.substring(0, 99)}...</p>`}
+  let intro = match.slice(0, 2).join(' - ')
+  if (intro.length > 149) {
+    intro = `${intro.substring(0, 149)}...`
+  }
   return (
     `<li>
-       ${intro}
-       ${image}
-       ${link}
+       <a href="${href}" target="_blank">${image}</a>
+       <div class="blurb">
+         <h1 class="wiki-title">
+           <span>${title}</span>
+           <a class="btn btn-lg btn-success" href="${href}" target="_blank">
+             <i class="fa fa-external-link aria-hidden="true""></i>
+             <i class="fa fa-wikipedia-w" aria-hidden="true"></i>
+           </a>
+         </h1>
+         <p>${intro}</p>
+       </div>
      </li>`)
 }
 
@@ -80,10 +89,9 @@ const performSearch = async (e) => {
   let pagesData = await getQueryPages()
   let view = Object.keys(pagesData).map(async (key) => {
     const page = pagesData[key]
-    let header = await performParse(page.title)
     let html = document.createElement('div')
-    html.innerHTML = header
-    return cardView(page, header, html)
+    html.innerHTML = await performParse(page.title)
+    return cardView(page, html)
   })
   let lines = await Promise.all(view)
   displayLines(lines)
