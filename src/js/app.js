@@ -3,7 +3,7 @@ import axios from 'axios'
 import classNames from 'classnames'
 import {loadState, saveState} from './localStorage'
 
-//Model
+// Model
 const wikiApi = 'https://en.wikipedia.org/w/api.php'
 const wikiLink = 'https://en.wikipedia.org/wiki'
 const noImage = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Wikipedia-info.png'
@@ -11,24 +11,24 @@ let persistedState = loadState() || {}
 let lastSearch = persistedState.lastSearch || ''
 
 const queryParams = (text) => ({
-  action: "query",
-  prop: "pageimages|extracts",
-  generator: "search",
+  action: 'query',
+  prop: 'pageimages|extracts',
+  generator: 'search',
   gsrsearch: text,
-  gsrlimit: "10",
-  pilimit: "max",
+  gsrlimit: '10',
+  pilimit: 'max',
   pithumbsize: 300,
-  exsentences: "1",
-  format: "json",
-  origin: "*"
+  exsentences: '1',
+  format: 'json',
+  origin: '*'
 })
 
 const parseParams = (title) => ({
-  action: "parse",
+  action: 'parse',
   page: title,
   section: 0,
-  format: "json",
-  origin: "*"
+  format: 'json',
+  origin: '*'
 })
 
 // View
@@ -41,9 +41,8 @@ const cardView = (page, html) => {
   let title = `${page.title}`
   const href = `${wikiLink}/${title.replace(/\s/g, '_')}`
   let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
-  let image = thumb != null ? `<img src=${thumb}>` : `<img src=${noImage}>`
-  const re = /((?!\.\s|\n).)+(.)/g
-  const match = html.innerText.match(re)
+  let image = thumb !== null ? `<img src=${thumb}>` : `<img src=${noImage}>`
+  const match = html.innerText.match(/((?!\.\s|\n).)+(.)/g)
   let intro = match.slice(0, 2).join(' - ')
   if (intro.length > 149) {
     intro = `${intro.substring(0, 149)}...`
@@ -54,8 +53,8 @@ const cardView = (page, html) => {
        <div class="blurb">
          <h1 class="wiki-title">
            <span>${title}</span>
-           <a class="btn btn-lg btn-success" href="${href}" target="_blank">
-             <i class="fa fa-external-link aria-hidden="true""></i>
+           <a class="btn-wiki" href="${href}" target="_blank">
+             <i class="fa fa-external-link" aria-hidden="true"></i>
              <i class="fa fa-wikipedia-w" aria-hidden="true"></i>
            </a>
          </h1>
@@ -64,7 +63,7 @@ const cardView = (page, html) => {
      </li>`)
 }
 
-//Controller
+// Controller
 const getQueryPages = async () => {
   const {data} = await axios.get(wikiApi, {params: queryParams(searchText.value)})
   return data.query.pages
@@ -72,7 +71,7 @@ const getQueryPages = async () => {
 
 const performParse = async (pageTitle) => {
   const {data} = await axios.get(wikiApi, {params: parseParams(pageTitle)})
-  return data.parse.text["*"]
+  return data.parse.text['*']
 }
 
 const displayLines = (view) => {

@@ -1,5 +1,4 @@
 {
-  "extends": "react-app",
   "rules": {
     "semi": [2, "never"],
     "eol-last": "error",
