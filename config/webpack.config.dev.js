@@ -11,6 +11,7 @@ var cssnext = require('postcss-cssnext')
 var ant = require('postcss-ant')
 var fontMagician = require('postcss-font-magician');
 var nested = require('postcss-nested')
+var objectFit = require('postcss-object-fit-images');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -161,6 +162,7 @@ module.exports = {
     return [
       cssnext(),
       nested,
+      objectFit,
       ant(),
       fontMagician({
         variants: {
