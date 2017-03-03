@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="src/css/main.pcss"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <title>Wikipedia Viewer</title>
   </head>
@@ -12,15 +13,15 @@
       <div class="search">
         <form id="search-form">
           <input id="search" type="text" placeholder="Enter search term here">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
           <input id="random" type="button" value="Random">
         </form>
       </div>
       <div id="results" class="output">
         <li>
-          <a href="https://en.wikipedia.org/wiki/Apple_Inc." target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Headquarters_in_Cupertino.jpg/300px-Apple_Headquarters_in_Cupertino.jpg">
-          </a>
+          <div class="img-wrapper">
+            <a href="https://en.wikipedia.org/wiki/Apple_Inc." target="_blank"></a>
+            <img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Headquarters_in_Cupertino.jpg/300px-Apple_Headquarters_in_Cupertino.jpg">
+          </div>
           <div class="blurb">
             <h1 class="wiki-title">
               <span>Apple Inc.</span>

@@ -6,6 +6,7 @@
   --green-smoke: #b0af73;
   --ebony-clay: #343337;
   --swirl: #d0cac3;
+  --risky-concrete: {background-image: linear-gradient(to top, #c4c5c7 0%, #dcdddf 52%, #ebebeb 100%)};
   --outline: {
     > * {
       border: 2px dashed #4527A1aa;
@@ -63,15 +64,38 @@ body {
   max-width: 960px;
   margin: 0 auto;
   #results li {
-    /*@apply --outline;*/
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 300px 2fr;
+    grid-template-rows: 260px;
     grid-gap: 20px;
     justify-items: stretch;
     overflow: hidden;
     margin-bottom: 1em;
     background-color: color(#fff blackness(5%));
-
+    &:hover {
+      @apply --risky-concrete;
+    }
+    .img-wrapper {
+      position: relative;
+      a {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #00000060;
+        opacity: 0;
+        transition: opacity .2s ease-in-out;
+        z-index: 1;
+      }
+      &:hover a {
+        opacity: .5;
+      }
+      img {
+        width: 300px;
+        height: 100%;
+        object-fit: scale-down;
+        background-color: color(#fff blackness(1%));
+      }
+    }
     > .blurb {
       display: flex;
       flex-direction: column;

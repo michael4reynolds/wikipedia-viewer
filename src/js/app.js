@@ -41,7 +41,8 @@ const cardView = (page, html) => {
   let title = `${page.title}`
   const href = `${wikiLink}/${title.replace(/\s/g, '_')}`
   let thumb = page.thumbnail ? `${page.thumbnail.source}` : null
-  let image = thumb !== null ? `<img src=${thumb}>` : `<img src=${noImage}>`
+  let src = thumb !== null ? thumb : noImage
+  let image = `<img class="img-fluid" src=${src}>`
   const match = html.innerText.match(/((?!\.\s|\n).)+(.)/g)
   let intro = match.slice(0, 2).join(' - ')
   if (intro.length > 149) {
@@ -49,7 +50,10 @@ const cardView = (page, html) => {
   }
   return (
     `<li>
-       <a href="${href}" target="_blank">${image}</a>
+       <div class="img-wrapper">
+         <a class="overlay" href="${href}" target="_blank"></a>
+         ${image}
+       </div>
        <div class="blurb">
          <h1 class="wiki-title">
            <span>${title}</span>
