@@ -12,6 +12,7 @@ var ant = require('postcss-ant')
 var fontMagician = require('postcss-font-magician');
 var nested = require('postcss-nested')
 var objectFit = require('postcss-object-fit-images');
+var postcss_scss = require('postcss-scss')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -157,24 +158,27 @@ module.exports = {
       // Remember to add the new extension(s) to the "url" loader exclusion list.
     ]
   },
-  
-  postcss: function() {
-    return [
-      cssnext(),
-      nested,
-      objectFit,
-      ant(),
-      fontMagician({
-        variants: {
-          'Open Sans': {
-            '300': [],
-            '400': [],
-            '700': []
-          }
-        },
-        foundries: ['google']
-      })
-    ];
+
+  postcss: function () {
+    return {
+      syntax: postcss_scss,
+      plugins: [
+        cssnext(),
+        nested,
+        objectFit,
+        ant(),
+        fontMagician({
+          variants: {
+            'Open Sans': {
+              '300': [],
+              '400': [],
+              '700': []
+            }
+          },
+          foundries: ['google']
+        })
+      ]
+    }
   },
   plugins: [
     // Makes some environment variables available in index.html.

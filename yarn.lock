@@ -3794,6 +3794,12 @@ postcss-replace-overflow-wrap@^1.0.0:
   dependencies:
     postcss "^5.0.16"
 
+postcss-scss@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/postcss-scss/-/postcss-scss-0.4.1.tgz#ad771b81f0f72f5f4845d08aa60f93557653d54c"
+  dependencies:
+    postcss "^5.2.13"
+
 postcss-selector-matches@^2.0.0:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/postcss-selector-matches/-/postcss-selector-matches-2.0.5.tgz#fa0f43be57b68e77aa4cd11807023492a131027f"
@@ -3861,7 +3867,7 @@ postcss@^4.1.16:
     js-base64 "~2.1.8"
     source-map "~0.4.2"
 
-postcss@^5.0.0, postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.19, postcss@^5.0.2, postcss@^5.0.21, postcss@^5.0.3, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.1.1, postcss@^5.2.0, postcss@^5.2.11, postcss@^5.2.5, postcss@^5.2.9:
+postcss@^5.0.0, postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.19, postcss@^5.0.2, postcss@^5.0.21, postcss@^5.0.3, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.1.1, postcss@^5.2.0, postcss@^5.2.11, postcss@^5.2.13, postcss@^5.2.5, postcss@^5.2.9:
   version "5.2.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.14.tgz#47b4fbde363fd4f81e547f7e0e43d6d300267330"
   dependencies:
