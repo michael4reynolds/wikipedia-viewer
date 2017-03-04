@@ -47,8 +47,9 @@
 /***************************/
 
 @custom-selector :--heading h1, h2, h3, h4, h5, h6, p;
+@custom-media --desktop (width > 715px);
 @custom-media --tablet (width <= 715px);
-@custom-media --mobile (width <= 515px);
+@custom-media --mobile (width <= 450px);
 
 body {
   background-color: var(--swirl);
@@ -67,7 +68,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 260px;
-    grid-gap: 20px;
     justify-items: stretch;
     overflow: hidden;
     margin-bottom: 1em;
@@ -101,6 +101,7 @@ body {
     > .blurb {
       display: flex;
       flex-direction: column;
+      padding: .25em;
       .wiki-title {
         display: flex;
         justify-content: space-between;
@@ -109,19 +110,26 @@ body {
       a {
         text-decoration: none;
         color: var(--ebony-clay);
-        margin: 1em 15px;
+      }
+    }
+    @media (--desktop) {
+      .img-wrapper {
+        margin: 0 .5em;
       }
     }
     @media (--tablet) {
       grid-template-columns: 1fr 1fr;
       > * {
-        padding: 5px;
+        margin: .3em;
       }
     }
     @media (--mobile) {
       grid-template-columns: auto;
       > * {
-        padding: 10px;
+        margin: .1em;
+      }
+      .img-wrapper img {
+        object-fit: fill;
       }
     }
   }
