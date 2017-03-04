@@ -76,6 +76,7 @@ body {
     align-items:center;
     @media (--mobile) {
       flex-direction: column;
+      margin-bottom: 20px;
     }
   }
   #search {
@@ -216,7 +217,25 @@ body {
 
 @supports not (display:grid) {
   #results li {
-    min-height: 696px;
-    gg: columns(auto auto) gutter(0);
+    gg: columns(.33 .64)
+        rows(260px)
+        gutter(0);
+  }
+  @media (--tablet) {
+    #results li {
+      gg: columns(.49 .48)
+      rows(260px)
+      gutter(0);
+    }
+  }
+  @media (--mobile) {
+    #results li {
+      gg: columns(auto)
+      rows(260px)
+      gutter(0);
+      .img-wrapper {
+        transform: scale(1.01, 1.01)
+      }
+    }
   }
 }
