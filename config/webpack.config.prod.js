@@ -13,6 +13,7 @@ var cssnext = require('postcss-cssnext')
 var ant = require('postcss-ant')
 var fontMagician = require('postcss-font-magician');
 var nested = require('postcss-nested')
+var objectFit = require('postcss-object-fit-images');
 var postcss_scss = require('postcss-scss')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
