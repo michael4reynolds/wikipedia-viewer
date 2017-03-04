@@ -1,6 +1,4 @@
-// import moment from 'moment'
 import axios from 'axios'
-// import classNames from 'classnames'
 import {loadState, saveState} from './localStorage'
 
 // Model
@@ -107,9 +105,13 @@ const viewRandomPage = () => {
 
 // initialize
 const init = () => {
-  searchText.value = lastSearch
-  searchForm.onsubmit = performSearch
-  randomBtn.onclick = viewRandomPage
+  try {
+    searchText.value = lastSearch
+    searchForm.onsubmit = performSearch
+    randomBtn.onclick = viewRandomPage
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 init()

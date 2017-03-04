@@ -10,12 +10,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="search">
-        <form id="search-form">
-          <input id="search" type="text" placeholder="Enter search term here">
-          <input id="random" type="button" value="Random">
-        </form>
-      </div>
+      <form id="search-form">
+        <div class="search-area">
+          <input id="search" type="text" placeholder="Search..." required>
+          <button class="search-icon"><i class="fa fa-search"></i></button>
+        </div>
+        <input id="random" type="button" value="Random">
+      </form>
       <div id="results" class="output">
         <li>
           <div class="img-wrapper">
