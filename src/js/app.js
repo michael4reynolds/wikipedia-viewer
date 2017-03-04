@@ -51,7 +51,7 @@ const cardView = (page, html) => {
   return (
     `<li>
        <div class="img-wrapper">
-         <a class="overlay" href="${href}" target="_blank"></a>
+         <a href="${href}" target="_blank"></a>
          ${image}
        </div>
        <div class="blurb">
