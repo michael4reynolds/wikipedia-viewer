@@ -99,7 +99,8 @@ const performSearch = async (e) => {
   rememberSearch()
 }
 
-const viewRandomPage = () => {
+const viewRandomPage = (e) => {
+  e.preventDefault()
   window.open('https://en.wikipedia.org/wiki/Special:Random', '_blank')
 }
 
